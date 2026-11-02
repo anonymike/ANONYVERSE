@@ -1,0 +1,3 @@
+import Link from "next/link";
+export const metadata = { title: "Profile" };
+export default function ProfilePage() { return <div className="page-head"><span className="eyebrow">YOUR SPACE</span><h1>Make it personal.</h1><p>The website uses the existing Manus OAuth and shared user identity architecture. No second authentication system is introduced in Phase 2.</p><div className="info-panel"><h2>Guest viewer</h2><p>Sign-in handoff is ready for the existing OAuth callback. Saved library and viewing progress will remain user-owned when the shared web session is connected.</p><Link className="btn" href="/my-list">View My List</Link></div></div>; }
