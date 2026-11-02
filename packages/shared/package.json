@@ -1,0 +1,1 @@
+{"name":"@anonyverse/shared","version":"0.2.0","private":true,"exports":{".":"./src/index.ts"},"types":"./src/index.ts"}

@@ -1,0 +1,8 @@
+import Link from "next/link";
+import { byKind, demoContent, labelForKind } from "@/lib/content";
+import type { ContentKind } from "@anonyverse/shared";
+import { ContentCard, Rail } from "@/components/content-card";
+export function CategoryPage({ kind, title, description }: { kind: ContentKind; title: string; description: string }) { const items = byKind(kind); return <><div className="page-head"><span className="eyebrow">ANONYVERSE / {labelForKind(kind)}</span><h1>{title}</h1><p>{description}</p><div className="filters"><button className="chip active">All</button><button className="chip">Trending</button><button className="chip">New arrivals</button><button className="chip">Top rated</button></div></div><div className="content-grid">{[...items, ...demoContent.filter((item) => item.id !== items[0]?.id)].map((item, index) => <ContentCard key={`${item.id}-${index}`} item={item} />)}</div></>; }
+export function InfoPage({ eyebrow, title, children }: { eyebrow: string; title: string; children: React.ReactNode }) { return <div className="page-head"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><div className="detail-body">{children}</div></div>; }
+export function Related() { return <Rail title="Keep exploring" items={demoContent.slice(1, 6)} />; }
+export function LegalLinks() { return <p className="card-meta"><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link></p>; }

@@ -1,0 +1,4 @@
+import Link from "next/link";
+import type { ContentItem } from "@anonyverse/shared";
+export function ContentCard({ item }: { item: ContentItem }) { return <Link className="card" href={`/content/${item.id}`}><div className="card-art" style={{ backgroundImage: `url(${item.artwork})` }}><span className={`card-badge ${item.status.includes("live") ? "live" : ""}`}>{item.eyebrow}</span></div><div className="card-copy"><div className="card-title">{item.title}</div><div className="card-meta">{item.year} · {item.rating} · {item.duration}</div></div></Link>; }
+export function Rail({ title, items }: { title: string; items: ContentItem[] }) { return <section className="section"><div className="section-head"><h2>{title}</h2><span>See all →</span></div><div className="rail">{items.map((item) => <ContentCard key={item.id} item={item} />)}</div></section>; }

@@ -1,0 +1,3 @@
+import { InfoPage } from "@/components/page-sections";
+export const metadata = { title: "Terms of Service" };
+export default function TermsPage() { return <InfoPage eyebrow="LEGAL / TERMS" title="Clear terms for a clear universe."><p>The Phase 2 website is a functional product surface using fictional editorial demo content. Provider integrations, commercial use, redistribution, attribution, geographic access and playback rights require separate review and approval.</p><p>Before production launch, replace this implementation placeholder with reviewed Terms of Service, content policy, release terms and support contacts.</p></InfoPage>; }
