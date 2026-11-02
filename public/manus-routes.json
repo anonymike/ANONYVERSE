@@ -1,0 +1,1 @@
+{"routes":[{"path":"/","title":"ANONYVERSE Home"},{"path":"/discover","title":"Discover"},{"path":"/sports","title":"Sports"},{"path":"/library","title":"My List"},{"path":"/profile","title":"Profile"},{"path":"/content/:id","title":"Content detail"},{"path":"/admin","title":"Provider operations"}]}

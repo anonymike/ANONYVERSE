@@ -1,0 +1,2 @@
+
+.profile-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:25px;max-width:900px}.profile-panel h2,.info-panel h2{font-size:28px;letter-spacing:-.05em;margin:10px 0}.profile-panel code{color:#fff;background:rgba(255,255,255,.08);padding:2px 5px;border-radius:5px;font-size:12px}@media(max-width:700px){.profile-grid{grid-template-columns:1fr}}

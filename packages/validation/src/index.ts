@@ -1,0 +1,4 @@
+import { z } from "zod";
+export const searchQuerySchema = z.object({ q: z.string().max(120).default(""), category: z.string().optional(), status: z.string().optional() });
+export const providerConfigSchema = z.object({ providerKey: z.string().min(2), category: z.string(), documentationUrl: z.string().url().optional(), authType: z.string().optional(), environment: z.enum(["development", "test", "production"]), credentialRef: z.string().optional(), approved: z.boolean(), enabled: z.boolean() });
+export const approvedReleaseSchema = z.object({ version: z.string(), platform: z.enum(["android", "ios"]), status: z.enum(["approved", "draft"]), downloadUrl: z.string().url().optional(), releaseNotes: z.array(z.string()), minimumRequirement: z.string().optional(), publishedAt: z.string().optional() });

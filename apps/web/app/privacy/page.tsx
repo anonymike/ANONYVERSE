@@ -1,0 +1,3 @@
+import { InfoPage } from "@/components/page-sections";
+export const metadata = { title: "Privacy Policy" };
+export default function PrivacyPage() { return <InfoPage eyebrow="LEGAL / PRIVACY" title="Privacy, without the fog."><p>ANONYVERSE Phase 2 uses the existing Manus authentication and backend architecture. User-owned records remain protected, provider credentials remain server-only, and fictional demo content is not presented as licensed third-party catalog data.</p><p>Before production launch, replace this implementation placeholder with reviewed jurisdiction-specific privacy language and the final data retention, analytics and cookie disclosures.</p></InfoPage>; }
