@@ -4,7 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, publicProcedure, router } from "./_core/trpc";
 import { providerCatalog } from "../lib/catalog";
 import { approvedReleases } from "../packages/shared/src/index";
-import { getProviderByKey, listApprovedReleases, listProviders, recordAdminAudit, recordProviderHealth, upsertMobileRelease, upsertProvider } from "./db";
+import { getProviderByKey, listApprovedReleases, listMobileReleases, listProviders, recordAdminAudit, recordProviderHealth, upsertMobileRelease, upsertProvider } from "./db";
 
 const providerInput = z.object({
   providerKey: z.string().min(2).max(80),
@@ -60,7 +60,8 @@ export const appRouter = router({
       const records = await listApprovedReleases();
       return records.length ? records : approvedReleases;
     }),
-    adminCreate: adminProcedure.input(z.object({ version: z.string().min(1).max(32), platform: z.enum(["android", "ios"]), downloadUrl: z.string().url(), releaseNotes: z.array(z.string().min(1)).min(1), minimumRequirement: z.string().max(180).optional(), sha256: z.string().max(128).optional(), approve: z.boolean().default(false) })).mutation(async ({ input, ctx }) => {
+    adminList: adminProcedure.query(() => listMobileReleases()),
+    adminCreate: adminProcedure.input(z.object({ version: z.string().min(1).max(32), platform: z.enum(["android", "ios"]), downloadUrl: z.string().url().refine((value) => value.startsWith("https://"), "HTTPS download URLs are required"), releaseNotes: z.array(z.string().min(1)).min(1), minimumRequirement: z.string().max(180).optional(), sha256: z.string().max(128).optional(), approve: z.boolean().default(false) })).mutation(async ({ input, ctx }) => {
       const created = await upsertMobileRelease({ ...input, status: input.approve ? "approved" : "draft", publishedAt: input.approve ? new Date() : null, releaseNotes: input.releaseNotes });
       await recordAdminAudit(ctx.user.id, "release.created", undefined, { version: input.version, platform: input.platform, approved: input.approve });
       return created;

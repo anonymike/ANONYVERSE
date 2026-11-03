@@ -143,6 +143,12 @@ export async function listApprovedReleases(): Promise<MobileRelease[]> {
   return db.select().from(mobileReleases).where(eq(mobileReleases.status, "approved")).orderBy(desc(mobileReleases.publishedAt));
 }
 
+export async function listMobileReleases(): Promise<MobileRelease[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(mobileReleases).orderBy(desc(mobileReleases.createdAt));
+}
+
 export async function upsertMobileRelease(input: InsertMobileRelease) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
