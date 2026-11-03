@@ -28,3 +28,8 @@ For each category independently:
 ## Important distinction
 
 The current admin screen is a Phase 1 readiness console, not a raw-secret vault. A future provider-management iteration can add a protected server action for creating/updating secret references, connection testing and audit events. The secret value should still be submitted directly to the backend secret manager and never written to the database or returned in API responses.
+
+
+## Implemented admin workflow
+
+The mobile Operations Console now calls authenticated admin procedures. It can load provider records, run a server-side credential-reference test, and approve/activate a provider only after the backend confirms a protected reference is present and the provider has been tested. Unauthenticated or non-admin users receive a forbidden response. Raw key input is intentionally absent from the mobile UI; secret values are added through Manus protected secret input.

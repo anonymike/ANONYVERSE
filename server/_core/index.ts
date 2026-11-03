@@ -8,6 +8,8 @@ import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { createCorsMiddleware } from "./cors";
 import { clearLegacySessionCookie } from "./cookies";
+import { listApprovedReleases } from "../db";
+import { approvedReleases } from "../../packages/shared/src/index";
 
 async function startServer() {
   const app = express();
@@ -24,6 +26,11 @@ async function startServer() {
 
   app.get("/api/health", (_req, res) => {
     res.json({ ok: true, timestamp: Date.now() });
+  });
+
+  app.get("/api/releases/approved", async (_req, res) => {
+    const releases = await listApprovedReleases();
+    res.json({ releases: releases.length ? releases : approvedReleases });
   });
 
   app.use(

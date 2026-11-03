@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, InsertMobileRelease, MobileRelease, adminAuditEvents, mobileReleases, providers, providerHealthChecks, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -90,3 +90,61 @@ export async function getUserByOpenId(openId: string) {
 }
 
 // TODO: add feature queries here as your schema grows.
+
+export async function listProviders() {
+  const db = await getDb();
+  return db ? db.select().from(providers).orderBy(providers.category, providers.name) : [];
+}
+
+export async function getProviderByKey(providerKey: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(providers).where(eq(providers.providerKey, providerKey)).limit(1);
+  return result[0];
+}
+
+export async function upsertProvider(input: typeof providers.$inferInsert) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  await db.insert(providers).values(input).onDuplicateKeyUpdate({
+    set: {
+      name: input.name,
+      category: input.category,
+      docsUrl: input.docsUrl,
+      baseUrl: input.baseUrl,
+      authType: input.authType,
+      environment: input.environment,
+      credentialRef: input.credentialRef,
+      subscriptionInfo: input.subscriptionInfo,
+      setupStatus: input.setupStatus,
+      approvalStatus: input.approvalStatus,
+      enabled: input.enabled,
+      updatedAt: new Date(),
+    },
+  });
+  return getProviderByKey(input.providerKey);
+}
+
+export async function recordProviderHealth(providerId: number, ok: boolean, message: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  await db.insert(providerHealthChecks).values({ providerId, ok, message });
+}
+
+export async function recordAdminAudit(actorUserId: number, action: string, providerId?: number, metadata?: Record<string, unknown>) {
+  const db = await getDb();
+  if (!db) return;
+  await db.insert(adminAuditEvents).values({ actorUserId, action, providerId, metadata });
+}
+
+export async function listApprovedReleases(): Promise<MobileRelease[]> {
+  const db = await getDb();
+  if (!db) return [];
+  return db.select().from(mobileReleases).where(eq(mobileReleases.status, "approved")).orderBy(desc(mobileReleases.publishedAt));
+}
+
+export async function upsertMobileRelease(input: InsertMobileRelease) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  return db.insert(mobileReleases).values(input);
+}
