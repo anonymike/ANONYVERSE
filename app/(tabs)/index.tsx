@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { BrandMark, C, Rail, AvailabilityButton } from "@/components/reel";
 import { catalog, railConfig } from "@/lib/catalog";
 import { useLibrary } from "@/lib/library";
@@ -12,7 +12,7 @@ export default function HomeScreen() {
  const byStatus = (status: string) => catalog.filter((item) => item.status.includes(status as any));
  const continueItems = catalog.filter((item) => progress[item.id]);
  return <ScreenContainer className="bg-transparent"><ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-   <View style={styles.top}><BrandMark /><View style={styles.topActions}><Ionicons name="notifications-outline" size={22} color={C.text} /><View style={styles.avatar}><Text style={styles.avatarText}>A</Text></View></View></View>
+   <View style={styles.top}><BrandMark /><View style={styles.topActions}><Pressable onPress={() => Alert.alert("Notifications", "Live alerts will appear when a provider is connected.")}><Ionicons name="notifications-outline" size={22} color={C.text} /></Pressable><Pressable onPress={() => router.push("/(tabs)/profile")} style={styles.avatar}><Text style={styles.avatarText}>A</Text></Pressable></View></View>
    <View style={styles.hero}><Image source={{ uri: hero.hero }} style={styles.heroImage} contentFit="cover" transition={300} /><View style={styles.heroGradient} /><View style={styles.heroCopy}><Text style={styles.kicker}>ANONYVERSE ORIGINAL · DEMO CATALOGUE</Text><Text style={styles.heroTitle}>{hero.title}</Text><Text style={styles.heroSub}>{hero.subtitle}</Text><View style={styles.meta}><Text style={styles.metaText}>{hero.year}</Text><Text style={styles.metaDot}>·</Text><Text style={styles.metaText}>★ {hero.rating}</Text><Text style={styles.metaDot}>·</Text><Text style={styles.metaText}>{hero.duration}</Text></View><View style={styles.heroButtons}><AvailabilityButton label="Play demo" onPress={() => router.push(`/content/${hero.id}`)} /><Ionicons name={isSaved(hero.id) ? "bookmark" : "bookmark-outline"} size={21} color={C.text} onPress={() => toggleSaved(hero.id)} /></View></View></View>
    <View style={styles.notice}><View style={styles.noticeIcon}><Ionicons name="sparkles" size={15} color={C.red} /></View><View><Text style={styles.noticeTitle}>Editorial demo catalogue</Text><Text style={styles.noticeText}>Real providers can be activated one category at a time.</Text></View><Ionicons name="chevron-forward" size={16} color={C.muted} /></View>
    {railConfig.map((rail) => { const items = rail.kind ? catalog.filter((item) => item.kind === rail.kind) : rail.statuses.length === 0 ? continueItems : byStatus(rail.statuses[0]); return <Rail key={rail.title} title={rail.title} items={items.length ? items : catalog.slice(0, 3)} wide={rail.title === "Continue watching"} />; })}
